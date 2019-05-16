@@ -10,14 +10,16 @@ class StockDeliveryOrderInherit1(models.Model):
 	@api.one
 	@api.depends('name', 'origin')
 	def _compute_managment(self):
-		if self.env["sale.order"].search_count([("name", "=", self.origin)]) > 0:
+		if self.origin == False:
+			self.hs_managment = False
+		elif self.env["sale.order"].search_count([("name", "=", self.origin)]) > 0:
 			env = self.env["sale.order"].search([("name", "=", self.origin)], limit=1)
 			self.hs_managment = env.user_id.name
 		elif self.env["purchase.order"].search_count([("name", "=", self.origin)]) > 0:
 			env = self.env["purchase.order"].search([("name", "=", self.origin)], limit=1)
 			self.hs_managment = env.user_id.name
 		else:
-			self.hs_managment = ""
+			self.hs_managment = False
 
 
 	@api.one
