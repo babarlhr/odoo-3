@@ -8,7 +8,7 @@ class StockDeliveryOrderInherit1(models.Model):
 
 
 	@api.one
-	@api.depends('name')
+	@api.depends('name', 'origin')
 	def _compute_managment(self):
 		if self.env["sale.order"].search_count(["name", "=", self.origin]) > 0:
 			env = self.env["sale.order"].search(["name", "=", self.origin], limit=1)
@@ -21,7 +21,7 @@ class StockDeliveryOrderInherit1(models.Model):
 
 
 	@api.one
-	@api.depends('name')
+	@api.depends('name', 'origin')
 	def _compute_display_mangment(self):
 		self.hs_display = True
 
