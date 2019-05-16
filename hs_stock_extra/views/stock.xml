@@ -20,7 +20,7 @@
 			<field name="inherit_id" ref="stock.vpicktree"/>
 			<field name="arch" type="xml">
 				<xpath expr="//field[@name='origin']" position="before">
-					<field name="hs_managment" attrs="{'invisible': [('hs_display', '=', False)]}"/>
+					<field name="hs_managment" attrs="{'invisible': [('hs_managment', '=', '')]}"/>
 				</xpath>
 			</field>
 		</record>
