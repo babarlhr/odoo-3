@@ -15,9 +15,10 @@ class CustomerActivityStatement(models.AbstractModel):
 	def _format_date_to_partner_lang(self, raw_date, partner_id):
 		lang_code = self.env['res.partner'].browse(partner_id).lang
 		lang = self.env['res.lang']._lang_get(lang_code)
-		str_date = fields.Date.to_string(raw_date)
-		date = datetime.strptime(str_date, DEFAULT_SERVER_DATE_FORMAT).date()
-		return date.strftime(lang.date_format)
+		#str_date = fields.Date.to_string(raw_date)
+		#date = datetime.strptime(str_date, DEFAULT_SERVER_DATE_FORMAT).date()
+		return raw_date.strftime(lang.date_format)
+
 
 	def _initial_balance_sql_q1(self, partners, date_start, account_type):
 		return """
@@ -39,6 +40,7 @@ class CustomerActivityStatement(models.AbstractModel):
 								l.company_id
 		""" % (partners, account_type, date_start)
 
+
 	def _initial_balance_sql_q2(self, company_id):
 		return """
 			SELECT Q1.partner_id, debit-credit AS balance,
@@ -47,6 +49,7 @@ class CustomerActivityStatement(models.AbstractModel):
 			JOIN res_company c ON (c.id = Q1.company_id)
 			WHERE c.id = %s
 		""" % company_id
+
 
 	def _get_account_initial_balance(self, company_id, partner_ids,
 									 date_start, account_type):
@@ -63,6 +66,7 @@ class CustomerActivityStatement(models.AbstractModel):
 		for row in self.env.cr.dictfetchall():
 			res[row.pop('partner_id')].append(row)
 		return res
+
 
 	def _display_lines_sql_q1(self, partners, date_start, date_end,
 							  account_type):
@@ -91,6 +95,7 @@ class CustomerActivityStatement(models.AbstractModel):
 								l.amount_currency, l.company_id
 		""" % (partners, account_type, date_start, date_end)
 
+
 	def _display_lines_sql_q2(self, company_id):
 		return """
 			SELECT Q1.partner_id, Q1.move_id, Q1.date, Q1.date_maturity,
@@ -101,6 +106,7 @@ class CustomerActivityStatement(models.AbstractModel):
 			JOIN res_company c ON (c.id = Q1.company_id)
 			WHERE c.id = %s
 		""" % company_id
+
 
 	def _get_account_display_lines(self, company_id, partner_ids, date_start,
 								   date_end, account_type):
@@ -122,6 +128,7 @@ class CustomerActivityStatement(models.AbstractModel):
 		for row in self.env.cr.dictfetchall():
 			res[row.pop('partner_id')].append(row)
 		return res
+
 
 	def _show_buckets_sql_q1(self, partners, date_end, account_type):
 		return """
@@ -166,6 +173,7 @@ class CustomerActivityStatement(models.AbstractModel):
 								l.company_id
 		""" % (date_end, date_end, partners, account_type, date_end,
 			   date_end, date_end)
+
 
 	def _show_buckets_sql_q2(self, date_end, minus_30, minus_60, minus_90,
 							 minus_120):
@@ -226,6 +234,7 @@ class CustomerActivityStatement(models.AbstractModel):
 			   minus_90, minus_60, minus_120, minus_90, minus_120, minus_90,
 			   minus_120, minus_120)
 
+
 	def _show_buckets_sql_q3(self, company_id):
 		return """
 			SELECT Q2.partner_id, current, b_1_30, b_30_60, b_60_90, b_90_120,
@@ -235,6 +244,7 @@ class CustomerActivityStatement(models.AbstractModel):
 			JOIN res_company c ON (c.id = Q2.company_id)
 			WHERE c.id = %s
 		""" % company_id
+
 
 	def _show_buckets_sql_q4(self):
 		return """
@@ -248,6 +258,7 @@ class CustomerActivityStatement(models.AbstractModel):
 			GROUP BY partner_id, currency_id
 		"""
 
+
 	def _get_bucket_dates(self, date_end):
 		return {
 			'date_end': date_end,
@@ -256,6 +267,7 @@ class CustomerActivityStatement(models.AbstractModel):
 			'minus_90': date_end - timedelta(days=90),
 			'minus_120': date_end - timedelta(days=120),
 		}
+
 
 	def _get_account_show_buckets(self, company_id, partner_ids, date_end,
 								  account_type):
@@ -286,6 +298,7 @@ class CustomerActivityStatement(models.AbstractModel):
 		for row in self.env.cr.dictfetchall():
 			res[row.pop('partner_id')].append(row)
 		return res
+
 
 	@api.model
 	def _get_report_values(self, docids, data=None):
