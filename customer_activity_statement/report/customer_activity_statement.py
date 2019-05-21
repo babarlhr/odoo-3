@@ -12,9 +12,10 @@ class CustomerActivityStatement(models.AbstractModel):
 
 	_name = 'report.customer_activity_statement.statement'
 
-	def _format_date_to_partner_lang(self, str_date, partner_id):
+	def _format_date_to_partner_lang(self, raw_date, partner_id):
 		lang_code = self.env['res.partner'].browse(partner_id).lang
 		lang = self.env['res.lang']._lang_get(lang_code)
+		str_date = fields.Date.to_string(raw_date)
 		date = datetime.strptime(str_date, DEFAULT_SERVER_DATE_FORMAT).date()
 		return date.strftime(lang.date_format)
 
@@ -293,7 +294,7 @@ class CustomerActivityStatement(models.AbstractModel):
 		date_start = data['date_start']
 		date_end = data['date_end']
 		account_type = data['account_type']
-		today = fields.Date.to_string(fields.Date.today())
+		today = fields.Date.today()
 
 		balance_start_to_display, buckets_to_display = {}, {}
 		lines_to_display, amount_due = {}, {}
