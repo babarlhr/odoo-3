@@ -15,9 +15,12 @@ class CustomerActivityStatement(models.AbstractModel):
 	def _format_date_to_partner_lang(self, raw_date, partner_id):
 		lang_code = self.env['res.partner'].browse(partner_id).lang
 		lang = self.env['res.lang']._lang_get(lang_code)
-		#str_date = fields.Date.to_string(raw_date)
-		#date = datetime.strptime(str_date, DEFAULT_SERVER_DATE_FORMAT).date()
-		return raw_date.strftime(lang.date_format)
+		if type(raw_date) == "str":
+			str_date = fields.Date.to_string(raw_date)
+			date = datetime.strptime(str_date, DEFAULT_SERVER_DATE_FORMAT).date()
+			return date.strftime(lang.date_format) 
+		else:
+			return raw_date.strftime(lang.date_format)
 
 
 	def _initial_balance_sql_q1(self, partners, date_start, account_type):
