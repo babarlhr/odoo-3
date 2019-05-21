@@ -290,8 +290,8 @@ class CustomerActivityStatement(models.AbstractModel):
 	def _get_report_values(self, docids, data=None):
 		company_id = data['company_id']
 		partner_ids = data['partner_ids']
-		date_start = fields.Date.to_string(data['date_start'])
-		date_end = fields.Date.to_string(data['date_end'])
+		date_start = data['date_start']
+		date_end = data['date_end']
 		account_type = data['account_type']
 		today = fields.Date.to_string(fields.Date.today())
 
