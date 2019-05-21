@@ -286,8 +286,8 @@ class CustomerActivityStatement(models.AbstractModel):
 			res[row.pop('partner_id')].append(row)
 		return res
 
-	@api.multi
-	def get_report_values(self, docids, data):
+	@api.model
+	def _get_report_values(self, docids, data=None):
 		company_id = data['company_id']
 		partner_ids = data['partner_ids']
 		date_start = data['date_start']
