@@ -15,7 +15,7 @@ class CustomerActivityStatement(models.AbstractModel):
 	def _format_date_to_partner_lang(self, raw_date, partner_id):
 		lang_code = self.env['res.partner'].browse(partner_id).lang
 		lang = self.env['res.lang']._lang_get(lang_code)
-		if type(raw_date) == "str":
+		if isinstance(raw_date, str) == True:
 			str_date = fields.Date.to_string(raw_date)
 			date = datetime.strptime(str_date, DEFAULT_SERVER_DATE_FORMAT).date()
 			return date.strftime(lang.date_format) 
