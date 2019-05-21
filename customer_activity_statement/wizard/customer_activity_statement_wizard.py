@@ -19,7 +19,7 @@ class CustomerActivityStatementWizard(models.TransientModel):
 	)
 
 	date_start = fields.Date(required=True,
-							 default=date(date.today(), 1, 1))
+							 default=date(date.today().year, 1, 1))
 	date_end = fields.Date(required=True,
 						   default=fields.Date.today())
 	show_aging_buckets = fields.Boolean(string='Include Aging Buckets',
