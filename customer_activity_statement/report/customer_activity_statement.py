@@ -293,7 +293,7 @@ class CustomerActivityStatement(models.AbstractModel):
 		date_start = data['date_start']
 		date_end = data['date_end']
 		account_type = data['account_type']
-		today = fields.Date.today()
+		today = fields.Date.to_string(fields.Date.today())
 
 		balance_start_to_display, buckets_to_display = {}, {}
 		lines_to_display, amount_due = {}, {}
