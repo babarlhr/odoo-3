@@ -173,7 +173,7 @@ class print_customer_statement(models.AbstractModel):
                     res.append({
                                 'date':line.date,
                                 'desc':line.ref or '/',
-                                'ref':line.move_id.name or '',
+                                'ref':line.move_id.type or '',  #Editado
                                 'date_maturity':line.date_maturity,
                                 'debit':float(inv_amt),
                                 'credit':float(paid_amt),
