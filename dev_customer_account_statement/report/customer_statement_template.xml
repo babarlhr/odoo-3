@@ -84,7 +84,7 @@ For Module Support : devintelle@gmail.com  or Skype : devintelle
 		                            	<span t-esc="l.get('date_maturity').strftime('%d-%m-%Y')"/>
 		                            </td>
 		                        </t>
-		                        <td class="text-center">
+		                        <td class="text-left">
 		                            <span t-esc="l.get('ref')"/>
 		                        </td>
 		                        <td class="text-right">
