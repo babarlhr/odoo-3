@@ -181,7 +181,7 @@ class print_customer_statement(models.AbstractModel):
                 if total > 0 or total < 0:
                     res.append({
                                 'date':line.date,
-                                'desc':line.ref or '/',
+                                'desc':line.invoice_id.number or '/',
                                 'ref':temp or '',  #Editado
                                 'date_maturity':line.date_maturity,
                                 'debit':float(inv_amt),
