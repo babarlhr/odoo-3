@@ -171,17 +171,17 @@ class print_customer_statement(models.AbstractModel):
                 total = float(inv_amt - paid_amt)
 
                 if line.invoice_id.type == 'out_invoice':
-                  line.ref = 'Factura'
+                  line.desc = 'Factura'
                 elif line.invoice_id.type == 'out_refund':
-                    line.ref = 'Nota Credito'
+                    line.desc = 'Nota Credito'
                 else:
-                   line.ref = ''  
+                   line.desc = ''  
 
                 if total > 0 or total < 0:
                     res.append({
                                 'date':line.date,
-                                'desc':line.ref or '/',
-                                'ref':line.invoice_id.type or '',  #Editado
+                                'desc':line.invoice_id.type or '',  #Editado
+                                'ref':line.ref or '/',
                                 'date_maturity':line.date_maturity,
                                 'debit':float(inv_amt),
                                 'credit':float(paid_amt),
