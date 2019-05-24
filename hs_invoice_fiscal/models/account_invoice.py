@@ -55,8 +55,19 @@ class AccountInvoiceInherit(models.Model):
 			invoice_no = invoice.number or '0'
 			self.invoice_name = "FACTI" + invoice_no
 
+
+			lines = []
+			amount_off = 0.00
+			for invoice_line in invoice.invoice_line_ids:
+				line = self.get_invoice_line(invoice_line)
+				if line["type"] == False and line["data"] != None:
+					amount_off  += invoice_line.price
+				else:
+					lines.append(line["data"])
+
+
 			#amount_off = self.get_total_amount_off(invoice)
-			amount_off = "0.00"
+			
 			amount_close = str(invoice.amount_total) or '0.00'
 			amount_total = str(invoice.amount_total) or '0.00'
 
@@ -160,10 +171,13 @@ class AccountInvoiceInherit(models.Model):
 				content_file.write(data_stream)
 
 
-			for invoice_line in invoice.invoice_line_ids:
-				line = self.get_invoice_line(invoice_line)
+			#for invoice_line in invoice.invoice_line_ids:
+			for line in lines:
+				#line = self.get_invoice_line(invoice_line)
+				#if line["type"] == True:
 				with open(content_file_path, 'a') as content_file2:
 					content_file2.write(line)
+
 
 			with open(content_file_path, 'rb') as textreport:
 				invoice.fiscal_file = base64.encodestring(textreport.read())
@@ -303,8 +317,17 @@ class AccountInvoiceInherit(models.Model):
 		uom = self.get_uom_item(invoice_line)
 		taxes = self.get_tax_item(invoice_line)
 
+		if float(quantity) < 0.0:
+			return {
+				"type": False,
+				"value": quantity
+			}
+
 		if description == "False":	#Description jamas debe ser False
-			return ""
+			return {
+				"type":False,
+				"value":None
+			}
 
 		data_stream = "{}{}{}{}{}{}{}{}\r\n".format(
 				self.add_field_cell(self.invoice_name,	20),
@@ -316,7 +339,11 @@ class AccountInvoiceInherit(models.Model):
 				self.add_field_cell(taxes,				10),
 				self.add_field_cell(2,					10),
 		)
-		return str(data_stream)
+		
+		return str({
+			"type": True,
+			"data": data_stream
+		})
 
 
 
@@ -328,16 +355,21 @@ class AccountInvoiceInherit(models.Model):
 		try:
 			subtotal = float(invoice.price_subtotal)
 			quantity = float(invoice.quantity)
-			total = subtotal / quantity
-			strTotal = str(total)
-			if "." in strTotal:
-				arrayTotal = strTotal.split(".")
-				intSection = arrayTotal[0]
-				decimalSection = arrayTotal[1]
-				if len(decimalSection) > 4:
-					decimalSection = decimalSection[:4]
-				strTotal = intSection + "." + decimalSection
-			return str(strTotal)
+			price = float(invoice.price_unit)
+			discount = float(invoice.discount)
+			if discount == 0.0:
+				return str(price)
+			else:
+				total = subtotal / quantity
+				strTotal = str(total)
+				if "." in strTotal:
+					arrayTotal = strTotal.split(".")
+					intSection = arrayTotal[0]
+					decimalSection = arrayTotal[1]
+					if len(decimalSection) > 4:
+						decimalSection = decimalSection[:4]
+					strTotal = intSection + "." + decimalSection
+				return str(strTotal)
 		except:
 			return str(invoice.price_unit or '0.00')
 
