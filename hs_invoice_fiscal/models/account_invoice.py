@@ -320,13 +320,13 @@ class AccountInvoiceInherit(models.Model):
 		if float(quantity) < 0.0:
 			return {
 				"type": False,
-				"value": quantity
+				"data": quantity
 			}
 
 		if description == "False":	#Description jamas debe ser False
 			return {
 				"type":False,
-				"value":None
+				"data":None
 			}
 
 		data_stream = "{}{}{}{}{}{}{}{}\r\n".format(
