@@ -60,8 +60,8 @@ class AccountInvoiceInherit(models.Model):
 			amount_off = 0.00
 			for invoice_line in invoice.invoice_line_ids:
 				line = self.get_invoice_line(invoice_line)
-				if line["type"] == False and line["data"] != None:
-					amount_off  += invoice_line.price
+				if (line["type"] == False) and (line["data"] != None):
+					amount_off  += float(invoice_line.price)
 				else:
 					lines.append(line["data"])
 
@@ -325,8 +325,8 @@ class AccountInvoiceInherit(models.Model):
 
 		if description == "False":	#Description jamas debe ser False
 			return {
-				"type":False,
-				"data":None
+				"type": False,
+				"data": None
 			}
 
 		data_stream = "{}{}{}{}{}{}{}{}\r\n".format(
