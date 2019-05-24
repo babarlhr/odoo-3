@@ -326,7 +326,7 @@ class AccountInvoiceInherit(models.Model):
 		if description == "False":	#Description jamas debe ser False
 			return {
 				"type": False,
-				"data": None
+				"data": "None"
 			}
 
 		data_stream = "{}{}{}{}{}{}{}{}\r\n".format(
@@ -340,10 +340,10 @@ class AccountInvoiceInherit(models.Model):
 				self.add_field_cell(2,					10),
 		)
 		
-		return str({
+		return {
 			"type": True,
 			"data": data_stream
-		})
+		}
 
 
 
