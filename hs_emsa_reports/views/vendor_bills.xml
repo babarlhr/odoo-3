@@ -94,7 +94,7 @@
 		<template id="vendor_bill_template">
 			<t t-call="vendor_bill_template_style" t-lang="lang"/>
 			<t t-call="vendor_bill_template_body" t-lang="lang"/>
-		<template>
+		</template>
 
 		<report id="report_vendor_bill"
 			string="Solicitud de Pago"
