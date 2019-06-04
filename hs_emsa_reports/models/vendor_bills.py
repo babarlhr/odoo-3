@@ -49,7 +49,7 @@ class VendorBillsReport(models.AbstractModel):
 
 		return {
 			'doc_ids': data['ids'],
-			'doc_model': data['model'],
+			'doc_model': "account.invoice",
 			'date': current_date,
 			'amount': total,
 			'observations': observaciones,
@@ -61,13 +61,15 @@ class VendorBillsReport(models.AbstractModel):
 
 class AttendanceRecapReportWizard(models.TransientModel):
 	_name = 'vendor.bill.report.wizard'
-	doc_ids=self._context.get('active_ids')
 	observaciones = fields.Text(string="Observaciones")
+
+
 	@api.multi
 	def get_report(self):
+		doc_ids=self._context.get('active_ids')
 		content = {
 			'ids': doc_ids,
-			'model': self._name,
+			'model': "account.invoice",
 			'form': {
 				'observaciones': self.observaciones,
 			}
