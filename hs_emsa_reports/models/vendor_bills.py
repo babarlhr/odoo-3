@@ -29,6 +29,7 @@ class VendorBillsReport(models.AbstractModel):
 		report = self.env["ir.actions.report"]._get_report_from_name(report_name)
 		amount = 0.00
 		current_date = self.get_date_invoice(datetime.date.today())
+		observaciones = data['form']['observaciones'] if data != None else ""
 		lines = []
 		document = docids
 		if len(docids) > 1:
@@ -48,26 +49,29 @@ class VendorBillsReport(models.AbstractModel):
 		total = round(Decimal(amount), 2)
 
 		return {
-			'doc_ids': docids,
-			'doc_model': report.model,
+			'doc_ids': data['ids'],
+			'doc_model': data['model'],
 			'date': current_date,
 			'amount': total,
+			'observaciones': observaciones,
 			'columns': lines,
 			'docs': self.env[report.model].browse(document),
-            'report_type': data.get('report_type') if data else '',
+			'report_type': data.get('report_type') if data else '',
 		}
 
 
-"""
-class VendorBillsInherit(models.Model):
-	_inherit = "account.invoice"
-
+class AttendanceRecapReportWizard(models.TransientModel):
+	_name = 'vendor.bill.report.wizard'
+	observaciones = fields.Text(string="Observaciones")
 
 	@api.multi
 	def get_report(self):
 		data = {
-			"ids":self.ids,
-			"model":self._name
+			'ids': self.ids,
+			'model': self._name,
+			'form': {
+				'observaciones': self.observaciones
+			}
 		}
+
 		return self.env.ref('hs_emsa_reports.report_vendor_bill').report_action(self, data=data)
-"""

@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data>
-	
-		<!--
-		<template id="vendor_bill_template_style" inherit_id="web.report_layout">
-			<xpath expr="//head" position="inside">
-				<link rel='stylesheet' href="/hs_emsa_reports/static/src/css/report.css"/>
-			</xpath>
-		</template>
-		-->
-
 		<template id="vendor_bill_template">
 			<t t-call="web.html_container">
 				<t t-foreach="docs" t-as="o">
@@ -17,21 +8,10 @@
 						<t t-set="o" t-value="o.with_context(lang=lang)" />
 						<div class="page">
 							<style type="text/css">
-								h2 span{
-									font-size: 30pt !important;
-								}
-
 								div strong,
 								div p,
-								div span,
-								th span, 
-								td span{
+								div span{
 									font-size: 14pt !important;
-								}
-
-								div div span{
-									color: white !important;
-									border-bottom: 1px solid #616161 !important;
 								}
 							</style>
 
@@ -102,6 +82,7 @@
 							<div class="row mt32">
 								<div class="col-12">
 									<strong>Observaciones</strong>
+									<p class="m-0" t-esc="observaciones"/>
 								</div>
 							</div>
 
@@ -115,10 +96,42 @@
 		<report id="report_vendor_bill"
 			string="Solicitud de Pago"
 			model="account.invoice"
+			menu="False"
 			name="hs_emsa_reports.vendor_bill_template"
 			report_type="qweb-pdf"
 			attachment_use="False"
 			print_report_name="('vendor_bill_report.pdf')"
 		/>
+
+
+		<record model="ir.ui.view" id="vendor_bill_report_wizard">
+			<field name="name">Reporte para Solicitudes de Pagos</field>
+			<field name="model">vendor.bill.report.wizard</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Reporte - Solicitudes de Pagos">
+					<group>
+						<group>
+							<field name="observaciones"/>
+						</group>
+					</group>
+					<footer>
+						<button name="get_report" string="Generar reporte" type="object" class="oe_highlight"/>
+						<button string="Cancel" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+
+		<!-- wizard action on res.partner -->
+		<act_window id="vendor_bill_wizard_action"
+			name="Solicitud de Pago"
+			src_model="account.invoice"
+			res_model="vendor.bill.report.wizard"
+			view_type="form" view_mode="form" 
+			target="new"/>
+
+
 	</data>
 </odoo>
