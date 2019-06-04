@@ -66,7 +66,7 @@ class AttendanceRecapReportWizard(models.TransientModel):
 	@api.multi
 	def get_report(self):
 		content = {
-			'ids': self.doc_ids,
+			'ids': doc_ids,
 			'model': self._name,
 			'form': {
 				'observaciones': self.observaciones,
