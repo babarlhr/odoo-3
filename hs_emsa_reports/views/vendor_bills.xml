@@ -8,10 +8,10 @@
 						<t t-set="o" t-value="o.with_context(lang=lang)" />
 						<div class="page">
 							<style type="text/css">
-								div strong,
-								div p,
-								div span{
-									font-size: 14pt !important;
+								div > strong,
+								div > p,
+								div > span{
+									font-size: 12pt !important;
 								}
 							</style>
 
@@ -111,9 +111,7 @@
 			<field name="arch" type="xml">
 				<form string="Reporte - Solicitudes de Pagos">
 					<group>
-						<group>
-							<field name="observaciones"/>
-						</group>
+						<field name="observaciones"/>
 					</group>
 					<footer>
 						<button name="get_report" string="Generar reporte" type="object" class="oe_highlight"/>
