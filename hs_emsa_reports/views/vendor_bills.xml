@@ -2,19 +2,19 @@
 <odoo>
 	<data>
 	
-		<template id="vendor_bill_template_inherit" inherit_id="web.report_layout">
+		<template id="vendor_bill_template_style" inherit_id="web.report_layout">
 			<xpath expr="//head" position="inside">
 				<link rel='stylesheet' href="/hs_emsa_reports/static/src/css/report.css"/>
 			</xpath>
 		</template>
 
-		<template id="vendor_bill_template">
+		<template id="vendor_bill_template_body">
 			<t t-call="web.html_container">
 				<t t-foreach="docs" t-as="o">
 					<t t-call="web.external_layout">
 						<t t-set="o" t-value="o.with_context(lang=lang)" />
 						<div class="page">
-							<h2><span>Comprobante de Pago</span></h2>
+							<h2><span>Solicitud de Pago</span></h2>
 							<div class="row mt32 mb32">
 								<div class="col-auto mw-100 mb-2">
 									<strong>Fecha Documento:</strong>
@@ -58,6 +58,13 @@
 									<strong>Firma del Autorizador:</strong>
 								</div>
 							</div>
+
+							<div class="row">
+								<div class="col-12">
+									<div style="height:50px !important;"> </div>
+								</div>
+							</div>
+
 							<div class="row">
 								<div class="col-6">
 									<span style="color: white !important;border-bottom: 1px solid #616161 !important;">
@@ -70,6 +77,13 @@
 									</span>
 								</div>
 							</div>
+
+							<div class="row mt32">
+								<div class="col-12">
+									<strong>Observaciones</strong>
+								</div>
+							</div>
+
 						</div>
 					</t>
 				</t>
@@ -77,8 +91,13 @@
 		</template>
 
 
+		<template id="vendor_bill_template">
+			<t t-call="vendor_bill_template_style" t-lang="lang"/>
+			<t t-call="vendor_bill_template_body" t-lang="lang"/>
+		<template>
+
 		<report id="report_vendor_bill"
-			string="Vendors Bill Report"
+			string="Solicitud de Pago"
 			model="account.invoice"
 			name="hs_emsa_reports.vendor_bill_template"
 			report_type="qweb-pdf"
