@@ -82,7 +82,7 @@
 							<div class="row mt32">
 								<div class="col-12">
 									<strong>Observaciones</strong>
-									<p class="m-0" t-esc="observaciones"/>
+									<p class="m-0" t-esc="observations"/>
 								</div>
 							</div>
 

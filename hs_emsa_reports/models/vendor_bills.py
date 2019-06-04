@@ -27,15 +27,14 @@ class VendorBillsReport(models.AbstractModel):
 	def _get_report_values(self, docids, data=None):
 		report_name = 'hs_emsa_reports.vendor_bill_template'
 		report = self.env["ir.actions.report"]._get_report_from_name(report_name)
-		amount = 0.00
 		current_date = self.get_date_invoice(datetime.date.today())
-		observaciones = data['form']['observaciones'] if data != None else ""
-		lines = []
-		document = docids
-		if len(docids) > 1:
-			document = [docids[0]]
+		observaciones = data['form']['observaciones']
+		doc_ids = data['ids']
+		document = [doc_ids[0]] if len(doc_ids) > 1 else doc_ids
 
-		for doc in docids:
+		lines = []
+		amount = 0.00
+		for doc in doc_ids:
 			item = self.env["account.invoice"].search([('id', '=', doc)])
 			amount += item.amount_total
 			lines.append({
@@ -53,7 +52,7 @@ class VendorBillsReport(models.AbstractModel):
 			'doc_model': data['model'],
 			'date': current_date,
 			'amount': total,
-			'observaciones': observaciones,
+			'observations': observaciones,
 			'columns': lines,
 			'docs': self.env[report.model].browse(document),
 			'report_type': data.get('report_type') if data else '',
@@ -66,7 +65,7 @@ class AttendanceRecapReportWizard(models.TransientModel):
 
 	@api.multi
 	def get_report(self):
-		data = {
+		content = {
 			'ids': self.ids,
 			'model': self._name,
 			'form': {
@@ -74,4 +73,4 @@ class AttendanceRecapReportWizard(models.TransientModel):
 			}
 		}
 
-		return self.env.ref('hs_emsa_reports.report_vendor_bill').report_action(self, data=data)
+		return self.env.ref('hs_emsa_reports.report_vendor_bill').report_action(self, data=content)
