@@ -2,18 +2,39 @@
 <odoo>
 	<data>
 	
+		<!--
 		<template id="vendor_bill_template_style" inherit_id="web.report_layout">
 			<xpath expr="//head" position="inside">
 				<link rel='stylesheet' href="/hs_emsa_reports/static/src/css/report.css"/>
 			</xpath>
 		</template>
+		-->
 
-		<template id="vendor_bill_template_body">
+		<template id="vendor_bill_template">
 			<t t-call="web.html_container">
 				<t t-foreach="docs" t-as="o">
 					<t t-call="web.external_layout">
 						<t t-set="o" t-value="o.with_context(lang=lang)" />
 						<div class="page">
+							<style type="text/css">
+								h2 span{
+									font-size: 30pt !important;
+								}
+
+								div strong,
+								div p,
+								div span,
+								th span, 
+								td span{
+									font-size: 14pt !important;
+								}
+
+								div div span{
+									color: white !important;
+									border-bottom: 1px solid #616161 !important;
+								}
+							</style>
+
 							<h2><span>Solicitud de Pago</span></h2>
 							<div class="row mt32 mb32">
 								<div class="col-auto mw-100 mb-2">
@@ -90,11 +111,6 @@
 			</t>
 		</template>
 
-
-		<template id="vendor_bill_template">
-			<t t-call="vendor_bill_template_style" t-lang="lang"/>
-			<t t-call="vendor_bill_template_body" t-lang="lang"/>
-		</template>
 
 		<report id="report_vendor_bill"
 			string="Solicitud de Pago"
