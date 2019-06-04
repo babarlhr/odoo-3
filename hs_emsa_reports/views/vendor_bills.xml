@@ -129,8 +129,11 @@
 			name="Solicitud de Pago"
 			src_model="account.invoice"
 			res_model="vendor.bill.report.wizard"
-			view_type="form" view_mode="form" 
-			target="new"/>
+			view_type="form" 
+			view_mode="form" 
+			target="new"
+			key2="client_print_multi"
+			/>
 
 
 	</data>
